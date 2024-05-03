@@ -1,0 +1,27 @@
+// This config file is designed to send traces and metrics to the docker
+// compose environment from example/docker-compose.
+
+logging {
+	level  = "debug"
+	format = "logfmt"
+}
+
+prometheus.scrape "tile38" {
+  // Collect metrics from the default listen address.
+  targets = [{
+    __address__ = "tile38-saa1:9851",
+  }]
+
+  forward_to = [prometheus.remote_write.grafanacloud.receiver]
+}
+
+prometheus.remote_write "grafanacloud" {
+  endpoint {
+    url = "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
+
+    basic_auth {
+      username = "1557270"
+      password = env("GRAFANACLOUD_API_TOKEN")
+    }
+  }
+}
