@@ -9,7 +9,7 @@ logging {
 prometheus.scrape "tile38" {
   // Collect metrics from the default listen address.
   targets = [{
-    __address__ = "tile38-saa1:9851",
+    __address__ = "tile38-saa1:4321",
   }]
 
   forward_to = [prometheus.remote_write.grafanacloud.receiver]
