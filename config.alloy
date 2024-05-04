@@ -7,11 +7,20 @@ logging {
 }
 
 prometheus.scrape "tile38" {
-  // Collect metrics from the default listen address.
   targets = [{
     __address__ = "tile38-saa1:4321",
   }]
 
+  forward_to = [prometheus.remote_write.grafanacloud.receiver]
+}
+
+prometheus.exporter.redis "tile38redisexporter" {
+    redis_addr = "tile38-saa1"
+    is_tile38 = true
+}
+
+prometheus.scrape "tile38redis" {
+  targets = prometheus.exporter.redis.tile38redisexporter.targets
   forward_to = [prometheus.remote_write.grafanacloud.receiver]
 }
 
